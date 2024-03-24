@@ -1,0 +1,277 @@
+version: '3.9'
+services:
+
+  php-swoole-hyperf:
+    image: php-swoole-hyperf
+    hostname: php-swoole-hyperf
+    container_name: php-swoole-hyperf
+    build:
+      context: ./
+      dockerfile: ./.docker/php/hyperf/php/Dockerfile
+    ports:
+      - "9501:9501"
+    volumes:
+      - ./app-hyperf/:/data/project/app-hyperf
+      - ./.docker/php/hyperf/php/ini/php.ini:/etc/php82/php.ini
+      - ./.docker/php/hyperf/php/ini/swoole.ini:/etc/php82/conf.d/50_swoole.ini
+      - ./.docker/php/hyperf/php/ini/opcache.ini:/etc/php82/conf.d/00_opcache.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+    environment:
+       - TYPE_SERVE=hyperf
+    working_dir: /data/project/app-hyperf
+
+  php-cli-base-laravel-api:
+    image: php-cli-base-laravel-api
+    hostname: php-cli-base-laravel-api
+    container_name: php-cli-base-laravel-api
+    build:
+      context: ./
+      dockerfile: ./.docker/php/base-cli/Dockerfile
+    ports:
+      - "9020:9009"
+    volumes:
+      - ./app-laravel-api:/var/www/html/app-laravel-api
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+    #env_file:
+      #- ./app-symfony-api/.env
+    environment:
+       - TYPE_SERVE=laravel
+    #  - APP_ENV=${APP_ENV}
+    #  - APP_SECRET=${APP_SECRET}
+    working_dir: /var/www/html/app-laravel-api
+
+  php-cli-base-symfony-web:
+    image: php-cli-base-symfony-web
+    hostname: php-cli-base-symfony-web
+    container_name: php-cli-base-symfony-web
+    build:
+      context: ./
+      dockerfile: ./.docker/php/base-cli/Dockerfile
+    ports:
+      - "9010:9009"
+    volumes:
+      - ./app-symfony-web:/var/www/html/app-symfony-web
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+    #env_file:
+      #- ./app-symfony-web/.env
+    environment:
+       - TYPE_SERVE=php
+    #  - APP_ENV=${APP_ENV}
+    #  - APP_SECRET=${APP_SECRET}
+    working_dir: /var/www/html/app-symfony-web
+
+  php-cli-base-symfony-api:
+    image: php-cli-base-symfony-api
+    hostname: php-cli-base-symfony-api
+    container_name: php-cli-base-symfony-api
+    build:
+      context: ./
+      dockerfile: ./.docker/php/base-cli/Dockerfile
+    ports:
+      - "9011:9009"
+    volumes:
+      - ./app-symfony-api:/var/www/html/app-symfony-api
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+    #env_file:
+      #- ./app-symfony-web/.env
+    environment:
+       - TYPE_SERVE=php
+    #  - APP_ENV=${APP_ENV}
+    #  - APP_SECRET=${APP_SECRET}
+    working_dir: /var/www/html/app-symfony-api
+
+  php-cli-base:
+    image: php-cli-base
+    hostname: php-cli-base
+    container_name: php-cli-base
+    build:
+      context: ./
+      dockerfile: ./.docker/php/base-cli/Dockerfile
+    ports:
+      - "9009:9009"
+    volumes:
+      - ./:/var/www/html/
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+    #env_file:
+      #- ./app-symfony/.env
+    environment:
+    - COMPOSER_INSTALL=false
+    #  - APP_ENV=${APP_ENV}
+    #  - APP_SECRET=${APP_SECRET}
+
+  php-apache:
+    image: php-apache
+    hostname: php-apache
+    container_name: php-apache
+    build:
+      context: ./
+      dockerfile: ./.docker/php/apache/Dockerfile
+    ports:
+      - "8090:80"
+    volumes:
+      - ./app:/var/www/html/
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+
+  rabbitmq:
+    #image: "rabbitmq"
+    image: "rabbitmq:3-management"
+    container_name: rabbitmqdc
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      #RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_PASS: 12345
+      RABBITMQ_LOGS: "-"
+      RABBITMQ_SASL_LOGS: "-"
+      RABBITMQ_LOG_LEVEL: debug
+    networks:
+      - network-digital-codigos
+
+  #zookeeper:
+  #  image: confluentinc/cp-zookeeper:latest
+  #  container_name: zookeeper
+  #  ports:
+  #    - "2181:2181"
+  #  environment:
+  #    ZOOKEEPER_CLIENT_PORT: 2181
+  #    ZOOKEEPER_TICK_TIME: 2000
+  #  networks:
+  #    - network-digital-codigos
+
+  #kafka:
+  #  image: confluentinc/cp-kafka:latest
+  #  container_name: kafka
+  #  depends_on:
+  #    - zookeeper
+  #  ports:
+  #    - "9092:9092"
+  #  environment:
+  #    KAFKA_BROKER_ID: 1
+  #    KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #    KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  #    KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #  networks:
+  #    - network-digital-codigos
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - network-digital-codigos
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      #- KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - network-digital-codigos
+
+
+  mongodb:
+    image: "mongo"
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_ROOT_PASSWORD: 12345
+    networks:
+      - network-digital-codigos
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.10.0"
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      discovery.type: single-node
+      #ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTIC_PASSWORD: 12345
+      ELASTIC_USERNAME: elastic
+    networks:
+      - network-digital-codigos
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - network-digital-codigos
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 12345
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - network-digital-codigos
+      
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 12345
+    networks:
+      - network-digital-codigos
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  network-digital-codigos:
+    driver: bridge
+    external: true
+    name: network-digital-codigos
