@@ -29,7 +29,7 @@ services:
     container_name: php-cli-base-laravel-api
     build:
       context: ./
-      dockerfile: ./.docker/php/base-cli/Dockerfile
+      dockerfile: ./.docker/php/base-cli/DockerfileLaravel
     ports:
       - "9020:9009"
     volumes:
