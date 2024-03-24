@@ -49,7 +49,7 @@ create-project-hyperf:
 	@if [ -z "$$(ls -A ./app-hyperf)" ]; then \
 		echo "A pasta 'app-hyperf' está vazia. Criando um novo projeto Hyperf..."; \
 		make up-build; \
-		docker compose exec php-cli-base composer create-project hyperf/hyperf-skeleton /var/www/html/app-hyperf; rm -rf .git\
+		docker compose exec php-cli-base composer create-project hyperf/hyperf-skeleton /var/www/html/app-hyperf;\
 		echo "Projeto criado com sucesso!"; \
 		docker restart php-swoole-hyperf; \
 		echo "Container 'php-swoole-hyperf' reiniciado com sucesso!"; \
@@ -65,7 +65,7 @@ create-project-symfony-web:
 	@if [ -z "$$(ls -A ./app-symfony-web)" ]; then \
 		echo "A pasta 'app-symfony-web' está vazia. Criando um novo projeto Symfony..."; \
 		make up-build; \
-		docker compose exec php-cli-base composer create-project symfony/skeleton /var/www/html/app-symfony-web && rm -rf .git\
+		docker compose exec php-cli-base composer create-project symfony/skeleton /var/www/html/app-symfony-web &&\
 		docker compose exec php-cli-base composer require webapp -d /var/www/html/app-symfony-web && \
 		echo "Projeto Symfony criado com sucesso!"; \
 		docker restart php-cli-base-symfony-web; \
@@ -82,7 +82,7 @@ create-project-symfony-api:
 	@if [ -z "$$(ls -A ./app-symfony-api)" ]; then \
 		echo "A pasta 'app-symfony-api' está vazia. Criando um novo projeto Symfony..."; \
 		make up-build; \
-		docker compose exec php-cli-base composer create-project symfony/skeleton /var/www/html/app-symfony-api && rm -rf .git\
+		docker compose exec php-cli-base composer create-project symfony/skeleton /var/www/html/app-symfony-api &&\
 		echo "Projeto Symfony criado com sucesso!"; \
 		docker restart php-cli-base-symfony-api; \
         echo "Container 'php-cli-base-symfony-api' reiniciado com sucesso!"; \
@@ -98,7 +98,7 @@ create-project-laravel-api:
 	@if [ -z "$$(ls -A ./app-laravel-api)" ]; then \
 		echo "A pasta 'app-laravel-api' está vazia. Criando um novo projeto laravel..."; \
 		make up-build; \
-		docker compose exec php-cli-base composer create-project laravel/laravel /var/www/html/app-laravel-api && rm -rf .git\
+		docker compose exec php-cli-base composer create-project laravel/laravel /var/www/html/app-laravel-api &&\
 		echo "Projeto Laravel api criado com sucesso!"; \
 		docker restart php-cli-base-laravel-api; \
         echo "Container 'php-cli-base-laravel-api' reiniciado com sucesso!"; \

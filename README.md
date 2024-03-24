@@ -10,7 +10,12 @@
 
 
 ### Comandos Makefile
-- Para criar um novo projeto com Framework Hyperf endereço 'http://localhost:9501/')
+- Para criar um novo projeto com Framework Laravel | Endereço 'http://localhost:9020/')
+```make
+make create-project-laravel-api
+```
+
+- Para criar um novo projeto com Framework Hyperf | Endereço 'http://localhost:9501/')
 ```make
 make create-project-hyperf
 ```
