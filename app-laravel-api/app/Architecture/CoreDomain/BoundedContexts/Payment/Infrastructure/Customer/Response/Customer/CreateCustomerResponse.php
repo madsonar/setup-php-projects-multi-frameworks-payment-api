@@ -34,19 +34,9 @@ class CreateCustomerResponse implements ResponseInterface
 
     public function response()
     {
-        // Aqui você deverá adaptar a resposta conforme o framework ou biblioteca que estiver utilizando.
-        // Como a ideia é manter a independência do framework, deixamos genérico.
-        // Se estiver utilizando Laravel, por exemplo, poderia ser algo assim:
-        // return response()->json([
-        //     'data' => $this->getData(),
-        //     'message' => $this->getMessage(),
-        // ], $this->getStatusCode());
-
-        // Retorno genérico para manter a independência do framework:
-        return [
-            'status' => $this->getStatusCode(),
+        return response()->json([
             'data' => $this->getData(),
             'message' => $this->getMessage(),
-        ];
+        ], $this->getStatusCode());
     }
 }
