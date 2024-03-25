@@ -6,9 +6,9 @@ namespace App\Architecture\Shared\Application\Contracts\Response;
 
 interface ResponseInterface
 {
-    public function __construct(iterable|array $data, int $statusCode = 200, string $msg = "");
+    public function __construct(array $data, int $statusCode = 200, string $msg = "");
 
-    public function getData(): iterable|array;
+    public function getData(): array;
 
     public function getMessage(): string;
 
