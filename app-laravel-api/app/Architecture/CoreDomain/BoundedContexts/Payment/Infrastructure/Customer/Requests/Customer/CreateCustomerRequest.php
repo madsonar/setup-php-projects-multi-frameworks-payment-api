@@ -23,4 +23,11 @@ class CreateCustomerRequest extends FormRequest implements RequestInterface
     {
         $this->validateResolved();
     }
+
+    public function authorize()
+    {
+        // Aqui você pode adicionar qualquer lógica de autorização.
+        // Retorna true para permitir a todos os usuários.
+        return true;
+    }
 }

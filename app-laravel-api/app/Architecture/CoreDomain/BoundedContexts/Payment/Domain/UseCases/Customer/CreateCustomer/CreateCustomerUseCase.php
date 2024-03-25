@@ -5,7 +5,7 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\UseCases\Cu
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\CustomerRepositoryContract;
 
-class CustomerUseCase
+class CreateCustomerUseCase
 {
     private CustomerRepositoryContract $customerRepository;
 

@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Listen for XDebug",
             "type": "php",
@@ -9,7 +10,10 @@
             "port": 9003,
             "log": true,
             "pathMappings": {
-                "/var/www/html": "${workspaceFolder}/"
+                "/var/www/html/app-laravel-api": "${workspaceFolder}/app-laravel-api/"
+                //"/var/www/html/app-laravel-api": "${workspaceFolder}/app-laravel-api/app/"
+                //"/var/www/html/app-laravel-api": "${workspaceFolder}/"
+                //"/var/www/html": "${workspaceFolder}/"
                 //"/var/www/html": "${workspaceFolder}/app/"
             },
             "ignore": ["*/vendor//.php"],
