@@ -12,8 +12,12 @@ class Transaction
         public readonly int $payeeId,
         public readonly float $value,
         public TransactionStatus $status,
-        public readonly string $transactionKey,
+        public ?string $transactionKey,
         public readonly ?int $revertedTransactionId = null
     ) {}
-}
 
+    public function setTransactionKey(string $key): void
+    {
+        $this->transactionKey = $key;
+    }
+}

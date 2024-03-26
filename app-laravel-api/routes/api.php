@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Http\Controllers\CustomerController;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Http\Controllers\TransactionController;

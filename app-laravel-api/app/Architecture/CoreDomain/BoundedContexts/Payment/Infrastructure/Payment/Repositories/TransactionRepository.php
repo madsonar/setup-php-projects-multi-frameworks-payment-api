@@ -9,7 +9,6 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\M
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\TransactionStatus;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\InsufficientFunds;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class TransactionRepository implements TransactionRepositoryContract
 {
@@ -37,16 +36,15 @@ class TransactionRepository implements TransactionRepositoryContract
                 'payee_id' => $domainTransaction->payeeId,
                 'value' => $domainTransaction->value,
                 'status' => TransactionStatus::COMPLETED->value,
-                'transaction_key' => $domainTransaction->transactionKey ?: Str::uuid(),
+                'transaction_key' => $domainTransaction->transactionKey,
             ]);
     
             return $this->toDomainEntity($eloquentTransaction);
         });
     }
-
-    public function revertTransaction(int $originalTransactionId): DomainTransaction
+    public function revertTransaction(int $originalTransactionId, string $transactionKey): DomainTransaction
     {
-        return DB::transaction(function () use ($originalTransactionId) {
+        return DB::transaction(function () use ($originalTransactionId, $transactionKey) {
             $originalTransaction = EloquentTransaction::findOrFail($originalTransactionId);
 
             if ($originalTransaction->status === TransactionStatus::REVERTED->value) {
@@ -58,7 +56,7 @@ class TransactionRepository implements TransactionRepositoryContract
                 'payee_id' => $originalTransaction->payer_id,
                 'value' => $originalTransaction->value,
                 'status' => TransactionStatus::REVERTED->value,
-                'transaction_key' => Str::uuid(),
+                'transaction_key' => $transactionKey,
                 'reverted_transaction_id' => $originalTransaction->id,
             ]);
 

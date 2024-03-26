@@ -9,6 +9,10 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\TransactionRepositoryContract;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Repositories\TransactionRepository;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Repositories\WalletRepository;
+use App\Architecture\Shared\Domain\Contracts\HttpClient\HttpClientContract;
+use App\Architecture\Shared\Infrastructure\Adapters\Http\Client\Laravel\HttpClientLaravel;
+use Illuminate\Support\Facades\Http;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CustomerRepositoryContract::class, CustomerRepository::class);
         $this->app->bind(TransactionRepositoryContract::class, TransactionRepository::class);
         $this->app->bind(WalletRepositoryContract::class, WalletRepository::class);
+        $this->app->bind(HttpClientContract::class, HttpClientLaravel::class);
     }
 
     /**
@@ -27,6 +32,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->setBootstrapHttpClientToExternalPaymentAuthorizerService();
+    }
+
+    private function setBootstrapHttpClientToExternalPaymentAuthorizerService()
+    {
+        Http::macro('externalPaymentAuthorizerApi', function () {
+            $headers = [
+                'Accept' => 'application/json',
+            ];
+            return Http::withHeaders($headers)->baseUrl(env('API_EXTERNAL_PAYMENT_AUTHORIZER_BASE_URL'));
+        });
     }
 }

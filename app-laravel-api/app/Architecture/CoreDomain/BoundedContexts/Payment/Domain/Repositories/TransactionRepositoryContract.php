@@ -8,5 +8,5 @@ interface TransactionRepositoryContract
 {
     public function findById(int $id): ?Transaction;
     public function executeTransaction(Transaction $transaction): Transaction;
-    public function revertTransaction(int $transactionId): Transaction;
+    public function revertTransaction(int $transactionId, string $transactionKey): Transaction;
 }
