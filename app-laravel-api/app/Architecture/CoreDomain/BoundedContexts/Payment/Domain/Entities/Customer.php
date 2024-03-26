@@ -16,4 +16,9 @@ class Customer
         public CustomerType $user_type,
         public ?Wallet $wallet = null,
     ) {}
+
+    public function isShopkeeper(): bool
+    {
+        return $this->user_type === CustomerType::SHOPKEEPER;
+    }
 }
