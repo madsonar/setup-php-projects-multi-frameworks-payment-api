@@ -2,7 +2,7 @@
 
 namespace App\Architecture\Shared\Application\Contracts\Request;
 
-interface RequestInterface
+interface RequestContract
 {
     public function validate(): void;
 }

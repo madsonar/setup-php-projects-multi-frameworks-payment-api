@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -23,19 +21,22 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e, Request $request) {
-            // Verifica se a requisição é da API
             if ($request->is('api/*')) {
-                // Decide o código de status baseado no tipo de exceção
                 $statusCode = $e instanceof ModelNotFoundException ? 404 : 500;
                 if ($e instanceof HttpException) {
                     $statusCode = $e->getStatusCode();
                 }
 
-                // Retorna uma resposta JSON
-                return response()->json([
+                $response = [
                     'success' => false,
                     'message' => $e->getMessage(),
-                ], $statusCode);
+                ];
+
+                if (config('app.debug')) {
+                    $response['trace'] = $e->getTrace();
+                }
+
+                return response()->json($response, $statusCode);
             }
         });
 

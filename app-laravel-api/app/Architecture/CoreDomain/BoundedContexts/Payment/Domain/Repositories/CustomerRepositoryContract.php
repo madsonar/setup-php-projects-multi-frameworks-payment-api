@@ -4,7 +4,7 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositorie
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer;
 
-interface CustomerRepositoryContract
-{
-    public function save(Customer $customer): Customer;
+interface CustomerRepositoryContract {
+    public function saveWithWallet(Customer $customer): Customer;
 }
+

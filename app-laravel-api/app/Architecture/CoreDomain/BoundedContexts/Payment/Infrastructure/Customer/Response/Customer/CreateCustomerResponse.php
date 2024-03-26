@@ -2,41 +2,29 @@
 
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Response\Customer;
 
-use App\Architecture\Shared\Application\Contracts\Response\ResponseInterface;
+use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer;
 
-class CreateCustomerResponse implements ResponseInterface
+class CreateCustomerResponse extends BaseResponse
 {
-    private array $data;
-    private int $statusCode;
-    private string $msg;
-
-    public function __construct(array $data, int $statusCode = 200, string $msg = "")
+    public function __construct(Customer $customer)
     {
-        $this->data = $data;
-        $this->statusCode = $statusCode;
-        $this->msg = $msg;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->msg;
-    }
-
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
-    public function response()
-    {
-        return response()->json([
-            'data' => $this->getData(),
-            'message' => $this->getMessage(),
-        ], $this->getStatusCode());
+        $data = [
+            'customer' => [
+                'id' => $customer->id,
+                'first_name' => $customer->first_name,
+                'last_name' => $customer->last_name,
+                'document' => $customer->document,
+                'email' => $customer->email,
+                'user_type' => $customer->user_type->value,
+                'wallet' => [
+                    'account_number' => $customer->wallet->accountNumber,
+                    'current_balance' => $customer->wallet->currentBalance,
+                ]
+            ]
+        ];
+        
+        parent::__construct($data, 201, 'Customer created successfully');
     }
 }
+
