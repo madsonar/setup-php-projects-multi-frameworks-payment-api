@@ -16,7 +16,7 @@ class RevertTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'transaction_id' => 'required|integer',
+            'transaction_id' => 'required|integer|unique:transactions,reverted_transaction_id',
         ];
     }
 

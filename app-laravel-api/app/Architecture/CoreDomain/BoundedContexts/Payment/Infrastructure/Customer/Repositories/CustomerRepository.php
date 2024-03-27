@@ -28,7 +28,7 @@ class CustomerRepository implements CustomerRepositoryContract {
             $walletModel = new EloquentWallet([
                 'customer_id'    => $modelCustomer->id,
                 'account_number' => $this->generateAccountNumber(),
-                'current_balance' => 0.00,
+                'current_balance' => 1000.00,//temporary registration promotion
             ]);
             $walletModel->save();
 

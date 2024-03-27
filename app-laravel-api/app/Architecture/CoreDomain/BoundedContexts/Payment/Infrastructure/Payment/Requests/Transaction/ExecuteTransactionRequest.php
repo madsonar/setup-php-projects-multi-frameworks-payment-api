@@ -9,8 +9,8 @@ class ExecuteTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'payer_id' => 'required|integer',
-            'payee_id' => 'required|integer',
+            'payer_id' => 'required|integer|exists:customers,id',
+            'payee_id' => 'required|integer|exists:customers,id',
             'value' => 'required|numeric|min:0.01',
         ];
     }
