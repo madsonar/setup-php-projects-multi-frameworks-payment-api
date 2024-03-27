@@ -9,21 +9,18 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\Shopke
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\TransactionNotAuthorized;
 use App\Architecture\Shared\Domain\Helpers\UuidHelper;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Services\ExternalPaymentAuthorizerService;
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Services\Jobs\SendEmailJobService;
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Services\Jobs\SendSmsJobService;
 
 class ExecuteTransactionUseCase
 {
-    private TransactionRepositoryContract $transactionRepository;
-    private CustomerRepositoryContract $customerRepository;
-    private ExternalPaymentAuthorizerService $paymentAuthorizer;
-
     public function __construct(
-        TransactionRepositoryContract $transactionRepository,
-        CustomerRepositoryContract $customerRepository,
-        ExternalPaymentAuthorizerService $paymentAuthorizer
+        private TransactionRepositoryContract $transactionRepository,
+        private CustomerRepositoryContract $customerRepository,
+        private ExternalPaymentAuthorizerService $paymentAuthorizer,
+        private SendEmailJobService $sendEmailJobService,
+        private SendSmsJobService $sendSmsJobService
     ) {
-        $this->transactionRepository = $transactionRepository;
-        $this->customerRepository = $customerRepository;
-        $this->paymentAuthorizer = $paymentAuthorizer;
     }
 
     public function execute(Transaction $transaction): Transaction
@@ -31,10 +28,17 @@ class ExecuteTransactionUseCase
         $this->validatePayer($transaction->payerId);
         
         $transactionKey = $this->authorizeTransaction();
-
         $transaction->setTransactionKey($transactionKey);
         
-        return $this->transactionRepository->executeTransaction($transaction);
+        $executedTransaction = $this->transactionRepository->executeTransaction($transaction);
+
+        $emailData = $this->prepareEmailData($transaction);
+        $smsData = $this->prepareSmsData($transaction);
+
+        $this->sendEmailJobService->dispatch($emailData);
+        $this->sendSmsJobService->dispatch($smsData);
+
+        return $executedTransaction;
     }
 
     private function validatePayer(int $payerId): void
@@ -55,5 +59,27 @@ class ExecuteTransactionUseCase
         }
 
         return $transactionKey;
+    }
+
+    private function prepareEmailData(Transaction $transaction): array
+    {
+        $payer = $this->customerRepository->findById($transaction->payerId);
+        return [
+            'transactionId' => $transaction->getId(),
+            'amount' => $transaction->getValue(),
+            'senderName' => $payer->getFullName(),
+            'message' => "Você recebeu um pagamento de {$payer->getFullName()} no valor de {$transaction->getValue()}",
+            'receiverEmail' => $payer->getEmail(),
+            'subject' => "Recebimento de pagamento"
+        ];
+    }
+
+    private function prepareSmsData(Transaction $transaction): array
+    {
+        $payer = $this->customerRepository->findById($transaction->payerId);
+        return [
+            'transactionId' => $transaction->getId(),
+            'message' => "Você recebeu um pagamento de {$payer->getFullName()} no valor de {$transaction->getValue()}. Transação: {$transaction->getId()}"
+        ];
     }
 }

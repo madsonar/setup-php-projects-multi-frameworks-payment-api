@@ -20,4 +20,14 @@ class Transaction
     {
         $this->transactionKey = $key;
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getValue(): float
+    {
+        return $this->value;
+    }
 }

@@ -21,4 +21,14 @@ class Customer
     {
         return $this->user_type === CustomerType::SHOPKEEPER;
     }
+
+    public function getFullName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 }

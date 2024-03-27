@@ -267,6 +267,19 @@ services:
     depends_on:
       - mysql
 
+  redis-dc:
+    image: redis:6.2-alpine
+    container_name: redis-dc
+    hostname: redis-dc
+    build:
+      context: ./
+      dockerfile: ./.docker/redis/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - network-digital-codigos
+
 volumes:
   mysql-data:
 

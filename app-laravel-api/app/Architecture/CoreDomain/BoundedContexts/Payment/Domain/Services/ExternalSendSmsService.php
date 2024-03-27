@@ -4,7 +4,7 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Services;
 
 use App\Architecture\Shared\Domain\Contracts\HttpClient\HttpClientContract;
 
-class ExternalPaymentAuthorizerService
+class ExternalSendSmsService
 {
     private HttpClientContract $httpClient;
 
@@ -13,14 +13,13 @@ class ExternalPaymentAuthorizerService
         $this->httpClient = $httpClient;
     }
 
-    public function authorizeTransaction(string $transactionUuid): bool
+    public function send(array $data): bool
     {
         $headers = [];
-        $args = [];
     
-        $responseArray = $this->httpClient->get("/".$transactionUuid, $headers, $args, 'externalPaymentAuthorizerApi');
+        $responseArray = $this->httpClient->post('/external-send-sms', $headers, $data, 'externalSendEmailSmsApi');
     
-        if (!is_null($responseArray) && isset($responseArray['message']) && $responseArray['message'] === 'Autorizado') {
+        if (!is_null($responseArray) && isset($responseArray['send']) && $responseArray['send'] === true) {
             return true;
         } else {
             return false;
