@@ -2,7 +2,7 @@
 
 ![Arquitetura do Sistema de Pagamento](/_docs/Images/arch-infra.png)
 
-#Descrição:
+### Descrição:
 Esta arquitetura representa um sistema modular de processamento de pagamentos integrado com notificações via SMS e e-mail. A interação começa com diferentes tipos de clientes (PF - Pessoa Física, PJ - Pessoa Jurídica, ADM - Administrador) acessando a API REST de Pagamento hospedada em um contêiner Docker. O banco de dados MySQL também está encapsulado em um Docker, garantindo a persistência dos dados e a escalabilidade do serviço.
 
 O componente central é a API REST de Pagamento que gerencia a lógica de transações de pagamento. Esta API interage com o 'Payment Authorizer' para validar as transações. Se autorizado, a transação é executada e os detalhes são armazenados em 'Payment', 'Wallet' e 'Customer'. Se houver necessidade de reverter a transação, o serviço 'Transaction Revert' é acionado.
