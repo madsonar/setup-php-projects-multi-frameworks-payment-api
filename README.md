@@ -53,6 +53,34 @@ created_at: Timestamp de criação do registro.
 updated_at: Timestamp da última atualização do registro.
 A tabela transactions tem relações muitos-para-um com a tabela customers, indicando que um cliente pode realizar ou receber várias transações, mas cada transação está ligada a um único pagador e um único recebedor.
 
+## REST API Endpoints Resquest|Response - PaymentePAY
+
+### Customers | Create
+![Customer Create](/_docs/Images/endpoints/customers-create.png)
+
+### Customers | Wallet
+![Customer Wallet](/_docs/Images/endpoints/customers-wallet.png)
+
+### Payment | Transaction 
+![Payment Transaction](/_docs/Images/endpoints/transaction-payment.png)
+
+### Payment | Transaction not authorized
+![Payment Transaction not authorized](/_docs/Images/endpoints/ransaction-not-authorized.png)
+
+### Payment | Transaction | Revert
+![Payment Transaction Revert](/_docs/Images/endpoints/transaction-revert.png)
+
+### Service External Payment Authorizer
+![Service External Payment Authorizer](/_docs/Images/endpoints/external-payment-authorizer.png)
+
+### Service External Send Email
+![Service External Payment Authorizer](/_docs/Images/endpoints/external-send-email.png)
+
+### Service External Send SMS Not Authorized
+![Service External Send SMS Not Authorized](/_docs/Images/endpoints/external-send-sms-not-authorized.png)
+
+## Sobre o Projeto
+
 ## Sobre o Projeto
    - Criar setup dokerizados para projects PHP multi-frameworks: Laravel, Symfony e Hyperf
 
