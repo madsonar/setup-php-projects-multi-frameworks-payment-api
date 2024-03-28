@@ -65,7 +65,7 @@ A tabela transactions tem relações muitos-para-um com a tabela customers, indi
 ![Payment Transaction](/_docs/Images/endpoints/transaction-payment.png)
 
 ### Payment | Transaction not authorized
-![Payment Transaction not authorized](/_docs/Images/endpoints/ransaction-not-authorized.png)
+![Payment Transaction not authorized](/_docs/Images/endpoints/transaction-not-authorized.png)
 
 ### Payment | Transaction | Revert
 ![Payment Transaction Revert](/_docs/Images/endpoints/transaction-revert.png)
