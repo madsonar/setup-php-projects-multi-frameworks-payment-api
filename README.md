@@ -150,6 +150,7 @@ A tabela transactions tem relações muitos-para-um com a tabela customers, indi
 ![Service External Send SMS Not Authorized](/_docs/Images/endpoints/external-send-sms-not-authorized.png)
 
 ## Tree project PaymentPAY
+```make
 ├── CoreDomain
 │   └── BoundedContexts
 │       ├── Ai
@@ -265,6 +266,7 @@ A tabela transactions tem relações muitos-para-um com a tabela customers, indi
 │                   └── Laravel
 │                       └── HttpClientLaravel.php
 └── SupportDomain
+```
 
 #### Conclusão
 O PaymentPAY representa a sinergia entre práticas modernas de desenvolvimento e operações, resultando em uma plataforma de pagamentos que não apenas atende aos requisitos técnicos e de negócios de hoje, mas também está preparada para as demandas do futuro.
