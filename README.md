@@ -11,6 +11,48 @@ O sistema também possui filas para envio de SMS e e-mails através de serviços
 
 Por fim, o 'Servidor REDIS', operando como uma estrutura de dados em memória, oferece serviços de fila e cache para otimizar a performance do sistema, reduzindo o tempo de acesso aos dados frequentemente requisitados e agilizando a entrega de mensagens através das filas de notificações.
 
+## DER Banco de Dados - PaymentPAY
+
+![DER Banco de Dados](/_docs/Images/DER-DB.png)
+
+### Descrição:
+Diagrama de Relacionamento de Entidade (DER) do Banco de Dados do PaymentPAY. O diagrama inclui três tabelas: customers, wallets e transactions, que estão inter-relacionadas. Aqui está uma descrição de cada tabela e seus relacionamentos:
+
+### customers
+
+id: Chave primária, do tipo bigint e unsigned.
+first_name: Nome do cliente, do tipo varchar com 255 caracteres máximos.
+last_name: Sobrenome do cliente, do tipo varchar com 255 caracteres máximos.
+document: Documento de identificação do cliente, do tipo varchar com 255 caracteres máximos.
+email: E-mail do cliente, do tipo varchar com 255 caracteres máximos.
+password: Senha do cliente, do tipo varchar com 255 caracteres máximos.
+user_type: Tipo do usuário, podendo ser 'common' ou 'shopkeeper', representado por um enum.
+created_at: Timestamp de criação do registro.
+updated_at: Timestamp da última atualização do registro.
+is_active: Indica se o cliente está ativo, do tipo tinyint.
+### wallets
+
+id: Chave primária, bigint unsigned.
+customer_id: Chave estrangeira referenciando id da tabela customers.
+account_number: Número da conta, varchar com 255 caracteres.
+current_balance: Saldo atual, decimal com 10 dígitos no total e 2 dígitos após a vírgula.
+created_at: Timestamp de criação do registro.
+updated_at: Timestamp da última atualização do registro.
+Há uma relação de um-para-um entre customers e wallets, indicada pela seta verde, mostrando que cada cliente tem uma e apenas uma carteira associada.
+
+### transactions
+
+id: Chave primária, bigint unsigned.
+transaction_key: Chave de transação, char de 36 caracteres.
+payer_id: Chave estrangeira referenciando id da tabela customers para o pagador.
+payee_id: Chave estrangeira referenciando id da tabela customers para o recebedor.
+value: Valor da transação, decimal com 10 dígitos no total e 2 dígitos após a vírgula.
+status: Estado da transação, enum com valores 'PENDING', 'COMPLETED', 'FAILED', 'REVERTED'.
+reverted_transaction_id: Chave estrangeira opcional referenciando id da própria tabela transactions, indicando a transação original que foi revertida.
+created_at: Timestamp de criação do registro.
+updated_at: Timestamp da última atualização do registro.
+A tabela transactions tem relações muitos-para-um com a tabela customers, indicando que um cliente pode realizar ou receber várias transações, mas cada transação está ligada a um único pagador e um único recebedor.
+
 ## Sobre o Projeto
    - Criar setup dokerizados para projects PHP multi-frameworks: Laravel, Symfony e Hyperf
 
