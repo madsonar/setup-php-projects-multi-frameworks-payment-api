@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\UseCases\Wallet;
 
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Wallet;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\WalletRepositoryContract;
 
 class CheckBalanceWalletUseCase
 {
-    private $walletRepository;
-
-    public function __construct(WalletRepositoryContract $walletRepository)
+    public function __construct(private WalletRepositoryContract $walletRepository)
     {
-        $this->walletRepository = $walletRepository;
     }
 
-    public function execute(int $customerId)
+    public function execute(int $customerId): Wallet
     {
         return $this->walletRepository->getBalanceByCustomerId($customerId);
     }
 }
-

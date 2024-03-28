@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\TransactionStatus;
@@ -7,21 +9,22 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\Transaction
 class Transaction
 {
     public function __construct(
-        public readonly ?int $id,
+        public readonly int|null $id,
         public readonly int $payerId,
         public readonly int $payeeId,
         public readonly float $value,
         public TransactionStatus $status,
-        public ?string $transactionKey,
-        public readonly ?int $revertedTransactionId = null
-    ) {}
+        public string|null $transactionKey,
+        public readonly int|null $revertedTransactionId = null,
+    ) {
+    }
 
     public function setTransactionKey(string $key): void
     {
         $this->transactionKey = $key;
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
