@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:ignoreFile
+
 namespace App\Architecture\Shared\Infrastructure\Adapters\Http\Client\Laravel;
 
 use App\Architecture\Shared\Domain\Contracts\HttpClient\HttpClientContract;

@@ -272,7 +272,7 @@ A tabela transactions tem relações muitos-para-um com a tabela customers, indi
 O PaymentPAY representa a sinergia entre práticas modernas de desenvolvimento e operações, resultando em uma plataforma de pagamentos que não apenas atende aos requisitos técnicos e de negócios de hoje, mas também está preparada para as demandas do futuro.
 
 
-## Sobre o Projeto
+## Criando estrutura Base com Frameworks
    - Criar setup dokerizados para projects PHP multi-frameworks: Laravel, Symfony e Hyperf
 
 ## Requisitos
@@ -280,8 +280,6 @@ O PaymentPAY representa a sinergia entre práticas modernas de desenvolvimento e
    - Docker e compose
    - Makefile
    - Ambiente Linux, Mac ou Windows WSL
-
-
 
 ### Comandos Makefile
 - Para criar um novo projeto com Framework Laravel | Endereço 'http://localhost:9020/')
@@ -292,6 +290,16 @@ make create-project-laravel-api
 - Para criar um novo projeto com Framework Hyperf | Endereço 'http://localhost:9501/')
 ```make
 make create-project-hyperf
+```
+
+- Para criar um novo projeto com Framework Symfony API | Endereço 'http://localhost:9010/')
+```make
+make create-project-symfony-web
+```
+
+- Para criar um novo projeto com Framework Symfony Web | Endereço 'http://localhost:9011/')
+```make
+make create-project-symfony-api
 ```
 
 - Para buildar após ajustes: 

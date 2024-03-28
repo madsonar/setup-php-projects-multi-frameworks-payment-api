@@ -105,3 +105,25 @@ create-project-laravel-api:
 	else \
 		echo "A pasta 'app-symlaravelfony-api' já contém um projeto. Nenhuma ação realizada."; \
 	fi;
+
+# Comando para executar as filas do Laravel no container
+run-queues:
+	@echo "Iniciando as filas do Laravel..."
+	@docker compose exec php-cli-base-laravel-api php artisan queue:work --queue=emails & \
+	docker compose exec php-cli-base-laravel-api php artisan queue:work --queue=sms & \
+	docker compose exec php-cli-base-laravel-api php artisan queue:retry all
+
+# Comando para executar o PHPCS no container
+run-phpcs:
+	@echo "Executando PHPCS..."
+	@docker compose exec php-cli-base-laravel-api vendor/bin/phpcs -q --standard=./phpcs.xml.dist
+
+# Comando para executar testes do Laravel no container
+run-tests:
+	@echo "Executando testes do Laravel..."
+	@docker compose exec php-cli-base-laravel-api php artisan test
+
+# Correção do teste
+run-tests-pp:
+	@echo "Correção do teste..."
+	@docker run -it --rm -v $(pwd):/project -w /project jakzal/phpqa phpmd Architecture text cleancode,codesize,controversial,design,naming,unusedcode

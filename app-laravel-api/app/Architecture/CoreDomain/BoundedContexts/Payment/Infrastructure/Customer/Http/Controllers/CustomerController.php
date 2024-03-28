@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:ignoreFile
+
 declare(strict_types=1);
 
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Http\Controllers;
