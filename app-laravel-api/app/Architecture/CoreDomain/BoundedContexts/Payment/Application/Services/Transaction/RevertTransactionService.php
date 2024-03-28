@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Application\Services\Transaction;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Transaction;
@@ -7,9 +9,7 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\UseCases\Transact
 
 class RevertTransactionService
 {
-    private $revertTransactionUseCase;
-
-    public function __construct(RevertTransactionUseCase $revertTransactionUseCase)
+    public function __construct(private RevertTransactionUseCase $revertTransactionUseCase)
     {
         $this->revertTransactionUseCase = $revertTransactionUseCase;
     }
@@ -19,4 +19,3 @@ class RevertTransactionService
         return $this->revertTransactionUseCase->revert($id);
     }
 }
-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Application\Services\Transaction;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Transaction;
@@ -7,9 +9,7 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\UseCases\Transact
 
 class ExecuteTransactionService
 {
-    private $executeTransactionUseCase;
-
-    public function __construct(ExecuteTransactionUseCase $executeTransactionUseCase)
+    public function __construct(private ExecuteTransactionUseCase $executeTransactionUseCase)
     {
         $this->executeTransactionUseCase = $executeTransactionUseCase;
     }
