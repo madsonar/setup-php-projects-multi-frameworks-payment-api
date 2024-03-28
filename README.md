@@ -317,15 +317,37 @@ make down
 make up
 ```
 
-- Para iniciar o Docker Compose em modo detached: 
+- Rodar as filas: 
 ```make
-make up-d
+make run-queues
 ```
 
+- Rodar os testes: 
+```make
+make run-tests
+```
 
-## Teste app no endereço no browser
-- http://0.0.0.0:9501 - Hyperf
+- Rodar PHPCS: 
+```make
+run-phpcs
+```
 
+### Pronto de melhorias
+
+Extra functions
+	Colocar credito
+	Ver histórico
+
+Negocio 
+	Um cliente pode ter varias wallters
+	Dividir a transação em entrada e saída nas contas com positivo e negativo
+	Validar cpf / cnpj com base no tipo do cliente
+	Cadastro deve ter telefone
+
+Arch
+	Usar uuid nos id das tabelas do banco de dados
+	Criar classe para representar os status code http no response
+	Estrutura erros na resposta de validação, mostrar todos e por campo
 
 ## Contato
 - [LinkedIn](https://www.linkedin.com/in/madson-aguiar-rodrigues-5650472b/)
