@@ -1,24 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\Shared\Application\Contracts\Response;
 
-use App\Architecture\Shared\Application\Contracts\Response\ResponseContract;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseResponse implements ResponseContract
 {
-    protected array $data;
-    protected int $statusCode;
-    protected string $message;
-
-    public function __construct(array $data = [], int $statusCode = Response::HTTP_OK, string $message = '')
+    public function __construct(protected array $data = [], protected int $statusCode = Response::HTTP_OK, protected string $message = '')
     {
-        $this->data = $data;
-        $this->statusCode = $statusCode;
-        $this->message = $message;
     }
 
-    public function response()
+    public function response(): mixed
     {
         return response()->json([
             'data' => $this->data,

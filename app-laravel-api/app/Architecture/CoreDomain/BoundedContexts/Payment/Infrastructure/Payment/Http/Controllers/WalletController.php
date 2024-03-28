@@ -16,7 +16,7 @@ class WalletController extends Controller
         $this->checkBalanceWalletService = $checkBalanceWalletService;
     }
 
-    public function checkBalanceWallet(CheckBalanceWalletRequest $request)
+    public function checkBalanceWallet(CheckBalanceWalletRequest $request): mixed
     {
         $customerId = $request->input('customer_id');
         $wallet = $this->checkBalanceWalletService->checkBalance($customerId);

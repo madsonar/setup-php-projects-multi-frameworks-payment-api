@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// @phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Models\Customer;
+use Illuminate\Database\Eloquent\Model;
 
 class Wallet extends Model
 {

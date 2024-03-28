@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Response\Wallet;
 
-use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Wallet;
+use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 
 class CheckBalanceWalletResponse extends BaseResponse
 {
@@ -15,9 +17,9 @@ class CheckBalanceWalletResponse extends BaseResponse
                 'customer_id' => $wallet->customerId,
                 'account_number' => $wallet->accountNumber,
                 'current_balance' => $wallet->currentBalance,
-            ]
+            ],
         ];
-        
+
         parent::__construct($data, 200, 'Current balance!');
     }
 }

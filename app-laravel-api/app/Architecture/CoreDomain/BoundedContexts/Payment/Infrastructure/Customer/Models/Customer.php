@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Models;
+
+// @phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\CustomerType;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models\Wallet;
@@ -12,7 +18,13 @@ class Customer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name', 'last_name', 'document', 'email', 'password', 'user_type', 'is_active'
+        'first_name',
+        'last_name',
+        'document',
+        'email',
+        'password',
+        'user_type',
+        'is_active',
     ];
 
     protected $casts = [

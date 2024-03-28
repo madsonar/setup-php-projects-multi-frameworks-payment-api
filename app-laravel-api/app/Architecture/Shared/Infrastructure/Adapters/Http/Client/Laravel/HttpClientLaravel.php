@@ -17,7 +17,7 @@ class HttpClientLaravel implements HttpClientContract
                 env('API_EXTERNAL_PAYMENT_AUTHORIZER_MAX_CONNECTION_RETRIES', 1),
                 env('API_EXTERNAL_PAYMENT_AUTHORIZER_CONNECTION_RETRIES_INTERVAL', 1000)
             )->get($uri, $args);
-            
+
             if ($response->successful()) {
                 return $response->json();
             } else {
@@ -35,7 +35,7 @@ class HttpClientLaravel implements HttpClientContract
                 env('API_EXTERNAL_SEND_EMAIL_SMS_MAX_CONNECTION_RETRIES', 1),
                 env('API_EXTERNAL_SEND_EMAIL_SMS_CONNECTION_RETRIES_INTERVAL', 1000)
             )->post($uri, $data);
-            
+
             if ($response->successful()) {
                 return $response->json();
             } else {

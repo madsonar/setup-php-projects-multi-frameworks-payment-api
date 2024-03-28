@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// @phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\TransactionStatus;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Models\Customer;
+use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
@@ -20,11 +26,13 @@ class Transaction extends Model
         return $this->belongsTo(Customer::class, 'payee_id');
     }
 
-    public function setStatusAttribute($value) {
+    public function setStatusAttribute($value)
+    {
         $this->attributes['status'] = $value instanceof TransactionStatus ? $value->value : $value;
     }
 
-    public function getStatusAttribute($value): TransactionStatus {
+    public function getStatusAttribute($value): TransactionStatus
+    {
         return TransactionStatus::from($value);
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Repositories;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Wallet as DomainWallet;
@@ -8,19 +10,19 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\M
 
 class WalletRepository implements WalletRepositoryContract
 {
-    public function getBalanceByCustomerId(int $customerId): ?DomainWallet
+    public function getBalanceByCustomerId(int $customerId): DomainWallet|null
     {
         $wallet = EloquentWallet::where('customer_id', $customerId)->first();
 
-        if (!$wallet) {
+        if (! $wallet) {
             return null;
         }
 
         return new DomainWallet(
-            id: $wallet->id,
-            customerId: $wallet->customer_id,
+            id: (int) $wallet->id,
+            customerId: (int) $wallet->customer_id,
             accountNumber: $wallet->account_number,
-            currentBalance: $wallet->current_balance
+            currentBalance: (float) $wallet->current_balance,
         );
     }
 }

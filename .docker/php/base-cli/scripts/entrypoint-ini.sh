@@ -26,6 +26,12 @@ fi
 
 if [ "$TYPE_SERVE" = "laravel" ]; then
     # Comando para servidores Laravel (exemplo: serve Laravel)
+   
+    # Executar as migrations do Laravel
+    echo ">>> Running Laravel migrations"
+    php artisan migrate
+
+    # Inicia o servidor do Laravel
     exec php artisan serve --host=0.0.0.0 --port=9009
 elif [ "$TYPE_SERVE" = "symfony" ]; then
     # Comando para servidores Symfony (exemplo: serve Symfony) #versões anteriores

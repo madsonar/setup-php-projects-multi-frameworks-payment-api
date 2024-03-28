@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Services\ExternalSendEmailService;
@@ -8,30 +10,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class SendEmailTransaction implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    public $tries = 5;
+    public int $tries = 5;
 
-    protected array $transactionDetails;
-
-    public function __construct(array $transactionDetails)
+    public function __construct(protected array $transactionDetails)
     {
-        $this->transactionDetails = $transactionDetails;
     }
 
     public function handle(ExternalSendEmailService $emailService): void
     {
         $result = $emailService->send($this->transactionDetails);
 
-        if (!$result) {
-            $this->release(60);
+        if ($result) {
+            return;
         }
+
+        $this->release(60);
     }
 
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
     }
 }

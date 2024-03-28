@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Response\Customer;
 
-use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer;
+use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 
 class CreateCustomerResponse extends BaseResponse
 {
@@ -20,11 +22,10 @@ class CreateCustomerResponse extends BaseResponse
                 'wallet' => [
                     'account_number' => $customer->wallet->accountNumber,
                     'current_balance' => $customer->wallet->currentBalance,
-                ]
-            ]
+                ],
+            ],
         ];
-        
+
         parent::__construct($data, 201, 'Customer created successfully');
     }
 }
-

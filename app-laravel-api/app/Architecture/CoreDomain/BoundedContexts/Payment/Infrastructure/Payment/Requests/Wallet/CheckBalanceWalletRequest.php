@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Requests\Wallet;
+
+// @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,9 +19,7 @@ class CheckBalanceWalletRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'customer_id' => 'required|integer|exists:customers,id',
-        ];
+        return ['customer_id' => 'required|integer|exists:customers,id'];
     }
 
     public function authorize()

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Response\Transaction;
 
-use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Transaction;
+use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
 
 class RevertTransactionResponse extends BaseResponse
 {
@@ -18,10 +20,9 @@ class RevertTransactionResponse extends BaseResponse
                 'status' => $transaction->status->value,
                 'transaction_key' => $transaction->transactionKey,
                 'reverted_transaction_id' => $transaction->revertedTransactionId ?? null,
-            ]
+            ],
         ];
 
         parent::__construct($data, 200, 'Transaction reverted successfully');
     }
 }
-
