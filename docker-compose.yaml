@@ -11,7 +11,8 @@ services:
     ports:
       - "9501:9501"
     volumes:
-      - ./app-hyperf/:/data/project/app-hyperf
+      #- ./app-hyperf/:/data/project/
+      - ./app-hyperf/:/opt/www/
       - ./.docker/php/hyperf/php/ini/php.ini:/etc/php82/php.ini
       - ./.docker/php/hyperf/php/ini/swoole.ini:/etc/php82/conf.d/50_swoole.ini
       - ./.docker/php/hyperf/php/ini/opcache.ini:/etc/php82/conf.d/00_opcache.ini
@@ -19,9 +20,6 @@ services:
       - "host.docker.internal:host-gateway"
     networks:
       - network-digital-codigos
-    environment:
-       - TYPE_SERVE=hyperf
-    working_dir: /data/project/app-hyperf
 
   php-cli-base-laravel-api:
     image: php-cli-base-laravel-api
@@ -271,9 +269,9 @@ services:
     image: redis:6.2-alpine
     container_name: redis-dc
     hostname: redis-dc
-    build:
-      context: ./
-      dockerfile: ./.docker/redis/Dockerfile
+    #build:
+     # context: ./
+      #dockerfile: ./.docker/redis/Dockerfile
     restart: unless-stopped
     ports:
       - 6379:6379

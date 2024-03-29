@@ -98,7 +98,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN chown ${USER}:${USER} /usr/bin/composer
 
 # Copia o script entrypoint.sh para dentro do container
-COPY ./.docker/php/base-cli/scripts/entrypoint-ini.sh /usr/local/bin/entrypoint-ini.sh
+COPY .docker/php/base-cli/scripts/entrypoint-ini.sh /usr/local/bin/entrypoint-ini.sh
 
 # Torna o script executável
 RUN chmod +x /usr/local/bin/entrypoint-ini.sh

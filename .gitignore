@@ -14,3 +14,5 @@
 .DS_Store
 Thumbs.db
 .idea/
+/.phpcs.cache
+.phpcs.cache
