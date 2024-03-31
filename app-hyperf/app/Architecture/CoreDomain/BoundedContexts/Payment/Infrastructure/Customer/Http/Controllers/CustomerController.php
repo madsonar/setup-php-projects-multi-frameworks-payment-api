@@ -1,7 +1,5 @@
 <?php
 
-// phpcs:ignoreFile
-
 declare(strict_types=1);
 
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Http\Controllers;
@@ -11,15 +9,16 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\CustomerType;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Requests\Customer\CreateCustomerRequest;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Response\Customer\CreateCustomerResponse;
-use App\Http\Controllers\Controller;
+use Hyperf\HttpServer\Contract\ResponseInterface as HyperfResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
-class CustomerController extends Controller
+class CustomerController
 {
     public function __construct(private CreateCustomerService $createCustomerService)
     {
     }
 
-    public function create(CreateCustomerRequest $request): mixed
+    public function create(CreateCustomerRequest $request, HyperfResponseInterface $hyperResponse): PsrResponseInterface
     {
         $customerData = $request->validated();
 
@@ -29,12 +28,14 @@ class CustomerController extends Controller
             last_name: $customerData['last_name'],
             document: $customerData['document'],
             email: $customerData['email'],
-            password: bcrypt($customerData['password']),
+            password: $customerData['password'],
             user_type: CustomerType::from($customerData['user_type']),
         );
 
         $savedCustomer = $this->createCustomerService->createCustomer($customer);
 
-        return (new CreateCustomerResponse($savedCustomer))->response();
+        $response = new CreateCustomerResponse($savedCustomer);
+
+        return $response->response($hyperResponse);
     }
 }

@@ -8,7 +8,7 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Cus
 // @phpcs:disable SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\CustomerType;
-use Illuminate\Foundation\Http\FormRequest;
+use Hyperf\Validation\Request\FormRequest;
 
 use function array_map;
 use function implode;

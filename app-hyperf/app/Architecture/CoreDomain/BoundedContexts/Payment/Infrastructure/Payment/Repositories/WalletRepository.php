@@ -10,19 +10,19 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\M
 
 class WalletRepository implements WalletRepositoryContract
 {
-    public function getBalanceByCustomerId(int $customerId): DomainWallet|null
+    public function getBalanceByCustomerId(int $customerId): ?DomainWallet
     {
-        $wallet = EloquentWallet::where('customer_id', $customerId)->first();
+        $wallet = EloquentWallet::query()->where('customer_id', $customerId)->first();
 
-        if (! $wallet) {
+        if (!$wallet) {
             return null;
         }
 
         return new DomainWallet(
-            id: (int) $wallet->id,
-            customerId: (int) $wallet->customer_id,
+            id: $wallet->id,
+            customerId: $wallet->customer_id,
             accountNumber: $wallet->account_number,
-            currentBalance: (float) $wallet->current_balance,
+            currentBalance: $wallet->current_balance,
         );
     }
 }

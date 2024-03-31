@@ -1,39 +1,36 @@
 <?php
 
-// phpcs:ignoreFile
+declare(strict_types=1);
 
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Repositories;
 
-// @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
-
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Customer as DomainCustomer;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Wallet as DomainWallet;
-use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\CustomerType;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\CustomerRepositoryContract;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Models\Customer as EloquentCustomer;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models\Wallet as EloquentWallet;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Hyperf\DbConnection\Db;
+use App\Architecture\Shared\Domain\Helpers\UuidHelper;
 
 class CustomerRepository implements CustomerRepositoryContract
 {
     public function saveWithWallet(DomainCustomer $domainCustomer): DomainCustomer
     {
-        return DB::transaction(function () use ($domainCustomer) {
+        return Db::transaction(function () use ($domainCustomer) {
             $modelCustomer = new EloquentCustomer([
                 'first_name' => $domainCustomer->first_name,
                 'last_name'  => $domainCustomer->last_name,
                 'document'   => $domainCustomer->document,
                 'email'      => $domainCustomer->email,
-                'password'   => bcrypt($domainCustomer->password),
+                'password'   => password_hash($domainCustomer->password, PASSWORD_BCRYPT), // Ajustado para Hyperf
                 'user_type'  => $domainCustomer->user_type->value,
             ]);
             $modelCustomer->save();
 
             $walletModel = new EloquentWallet([
-                'customer_id'    => $modelCustomer->id,
-                'account_number' => $this->generateAccountNumber(),
-                'current_balance' => 1000.00,//temporary registration promotion
+                'customer_id'     => $modelCustomer->id,
+                'account_number'  => $this->generateAccountNumber(),
+                'current_balance' => 1000.00, // temporary registration promotion
             ]);
             $walletModel->save();
 
@@ -51,13 +48,13 @@ class CustomerRepository implements CustomerRepositoryContract
 
     private function generateAccountNumber(): string
     {
-        return Str::uuid()->toString();
+        return UuidHelper::generateUuid();
     }
 
-    public function findById(int $id): DomainCustomer|null
+    public function findById(int $id): ?DomainCustomer
     {
         $model = EloquentCustomer::find($id);
-        if (! $model) {
+        if (!$model) {
             return null;
         }
 
@@ -82,8 +79,8 @@ class CustomerRepository implements CustomerRepositoryContract
             last_name: $model->last_name,
             document: $model->document,
             email: $model->email,
-            password: $model->password,
-            user_type: CustomerType::from($model->user_type->value),
+            password: $model->password, // Atenção: Isso expõe o hash da senha. Considere remover ou segurar.
+            user_type: $domainCustomer->user_type, // Ajuste para o uso direto, se necessário.
             wallet: $wallet,
         );
     }

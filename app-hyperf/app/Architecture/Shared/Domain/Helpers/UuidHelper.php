@@ -4,12 +4,12 @@
 
 namespace App\Architecture\Shared\Domain\Helpers;
 
-use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class UuidHelper
 {
     public static function generateUuid(): string
     {
-        return (string) Str::uuid();
+        return Uuid::uuid4()->toString();
     }
 }
