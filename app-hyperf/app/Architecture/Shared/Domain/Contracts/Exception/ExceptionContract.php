@@ -6,5 +6,7 @@ namespace App\Architecture\Shared\Domain\Contracts\Exception;
 
 interface ExceptionContract
 {
-    public function response(): mixed;
+    public function getStatusCode(): int;
+
+    public function getResponseData(): array;
 }

@@ -13,9 +13,10 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\R
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Response\Transaction\ExecuteTransactionResponse;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Response\Transaction\RevertTransactionResponse;
 use App\Architecture\Shared\Domain\Helpers\UuidHelper;
-use App\Http\Controllers\Controller;
+use Hyperf\HttpServer\Contract\ResponseInterface as HyperfResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
-class TransactionController extends Controller
+class TransactionController
 {
     public function __construct(
         private ExecuteTransactionService $executeTransactionService,
@@ -23,13 +24,15 @@ class TransactionController extends Controller
     ) {
     }
 
-    public function executeTransaction(ExecuteTransactionRequest $request): mixed
+    public function executeTransaction(ExecuteTransactionRequest $request, HyperfResponseInterface $hyperResponse): PsrResponseInterface
     {
+        $validated = $request->validated();
+
         $transaction = new Transaction(
             id: null,
-            payerId: (int) $request->payer_id,
-            payeeId: (int) $request->payee_id,
-            value: (float) $request->value,
+            payerId: (int) $validated['payer_id'],
+            payeeId: (int) $validated['payee_id'],
+            value: (float) $validated['value'],
             status: TransactionStatus::PENDING,
             transactionKey: UuidHelper::generateUuid(),
         );
@@ -37,15 +40,18 @@ class TransactionController extends Controller
         $executedTransaction = $this->executeTransactionService->execute($transaction);
         $response            = new ExecuteTransactionResponse($executedTransaction);
 
-        return $response->response();
+        return $response->response($hyperResponse);
     }
 
-    public function revertTransaction(RevertTransactionRequest $request): mixed
+    public function revertTransaction(RevertTransactionRequest $request, HyperfResponseInterface $hyperResponse): PsrResponseInterface
     {
-        $transaction_id = (int) $request->input('transaction_id');
+        $validated     = $request->validated();
+        $transactionId = (int) $validated['transaction_id'];
 
-        $transaction = $this->revertTransactionService->revert($transaction_id);
+        $transaction = $this->revertTransactionService->revert($transactionId);
 
-        return (new RevertTransactionResponse($transaction))->response();
+        $response = new RevertTransactionResponse($transaction);
+
+        return $response->response($hyperResponse);
     }
 }

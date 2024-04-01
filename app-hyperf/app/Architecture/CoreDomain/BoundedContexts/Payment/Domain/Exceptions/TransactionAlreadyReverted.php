@@ -6,9 +6,9 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions;
 
 use App\Architecture\Shared\Domain\Contracts\Exception\BaseException;
 
-class InsufficientFunds extends BaseException
+class TransactionAlreadyReverted extends BaseException
 {
-    protected string $msg     = 'Transaction cannot be completed due to insufficient funds.';
+    protected string $msg     = 'This transaction has already been reverted.';
     protected int $statusCode = 422;
 
     public function __construct()

@@ -9,8 +9,12 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Wallet a
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\CustomerRepositoryContract;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Customer\Models\Customer as EloquentCustomer;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models\Wallet as EloquentWallet;
-use Hyperf\DbConnection\Db;
 use App\Architecture\Shared\Domain\Helpers\UuidHelper;
+use Hyperf\DbConnection\Db;
+
+use function password_hash;
+
+use const PASSWORD_BCRYPT;
 
 class CustomerRepository implements CustomerRepositoryContract
 {
@@ -22,7 +26,7 @@ class CustomerRepository implements CustomerRepositoryContract
                 'last_name'  => $domainCustomer->last_name,
                 'document'   => $domainCustomer->document,
                 'email'      => $domainCustomer->email,
-                'password'   => password_hash($domainCustomer->password, PASSWORD_BCRYPT), // Ajustado para Hyperf
+                'password'   => password_hash($domainCustomer->password, PASSWORD_BCRYPT),
                 'user_type'  => $domainCustomer->user_type->value,
             ]);
             $modelCustomer->save();
@@ -51,10 +55,10 @@ class CustomerRepository implements CustomerRepositoryContract
         return UuidHelper::generateUuid();
     }
 
-    public function findById(int $id): ?DomainCustomer
+    public function findById(int $id): DomainCustomer|null
     {
         $model = EloquentCustomer::find($id);
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -79,8 +83,8 @@ class CustomerRepository implements CustomerRepositoryContract
             last_name: $model->last_name,
             document: $model->document,
             email: $model->email,
-            password: $model->password, // Atenção: Isso expõe o hash da senha. Considere remover ou segurar.
-            user_type: $domainCustomer->user_type, // Ajuste para o uso direto, se necessário.
+            password: $model->password,
+            user_type: $model->user_type,
             wallet: $wallet,
         );
     }

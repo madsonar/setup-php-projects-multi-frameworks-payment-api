@@ -6,10 +6,10 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions;
 
 use App\Architecture\Shared\Domain\Contracts\Exception\BaseException;
 
-class InsufficientFunds extends BaseException
+class TransactionNotFound extends BaseException
 {
-    protected string $msg     = 'Transaction cannot be completed due to insufficient funds.';
-    protected int $statusCode = 422;
+    protected string $msg     = 'Transaction not found.';
+    protected int $statusCode = 404;
 
     public function __construct()
     {

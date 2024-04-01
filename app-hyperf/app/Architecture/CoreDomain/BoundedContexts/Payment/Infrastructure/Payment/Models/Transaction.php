@@ -44,7 +44,7 @@ class Transaction extends Model
         'payer_id' => 'integer',
         'payee_id' => 'integer',
         'value' => 'decimal:2',
-        'status' => 'string',
+        'status' => TransactionStatus::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'reverted_transaction_id' => 'integer',
@@ -74,19 +74,4 @@ class Transaction extends Model
         return $this->belongsTo(self::class, 'reverted_transaction_id');
     }
 
-    /**
-     * Mutator for the status attribute to store enum values.
-     */
-    public function setStatusAttribute($value): void
-    {
-        $this->attributes['status'] = $value instanceof TransactionStatus ? $value->value : $value;
-    }
-
-    /**
-     * Accessor for the status attribute to retrieve enum instances.
-     */
-    public function getStatusAttribute($value): TransactionStatus
-    {
-        return TransactionStatus::from($value);
-    }
 }

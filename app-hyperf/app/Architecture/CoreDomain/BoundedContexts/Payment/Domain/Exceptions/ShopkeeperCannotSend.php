@@ -10,4 +10,9 @@ class ShopkeeperCannotSend extends BaseException
 {
     protected string $msg     = 'Shopkeepers are not allowed to perform transfers.';
     protected int $statusCode = 422;
+
+    public function __construct()
+    {
+        parent::__construct($this->msg, $this->statusCode);
+    }
 }

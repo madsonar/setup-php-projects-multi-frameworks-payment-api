@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Response\Transaction;
 
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Transaction;
-use App\Architecture\Shared\Application\Contracts\Response\BaseResponse;
+use App\Architecture\Shared\Infrastructure\Contracts\Response\BaseResponse;
 
 class ExecuteTransactionResponse extends BaseResponse
 {

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Requests\Transaction;
 
-// @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-
-use Illuminate\Foundation\Http\FormRequest;
+use Hyperf\Validation\Request\FormRequest;
 
 class ExecuteTransactionRequest extends FormRequest
 {
-    public function rules()
+
+    public function rules(): array
     {
         return [
             'payer_id' => 'required|integer|exists:customers,id',
@@ -19,12 +18,7 @@ class ExecuteTransactionRequest extends FormRequest
         ];
     }
 
-    public function validate(): void
-    {
-        $this->validateResolved();
-    }
-
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }

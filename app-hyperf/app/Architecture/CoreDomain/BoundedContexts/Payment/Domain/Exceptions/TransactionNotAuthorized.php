@@ -10,4 +10,9 @@ class TransactionNotAuthorized extends BaseException
 {
     protected string $msg     = 'Transaction not authorized.';
     protected int $statusCode = 403;
+
+    public function __construct()
+    {
+        parent::__construct($this->msg, $this->statusCode);
+    }
 }

@@ -13,7 +13,7 @@ use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\J
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Repositories\TransactionRepository;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Repositories\WalletRepository;
 use App\Architecture\Shared\Domain\Contracts\HttpClient\HttpClientContract;
-use App\Architecture\Shared\Infrastructure\Adapters\Http\Client\Laravel\HttpClientLaravel;
+use App\Architecture\Shared\Infrastructure\Adapters\Http\Client\Hyperf\HttpClientHyperf;
 
 /**
  * This file is part of Hyperf.
@@ -30,9 +30,9 @@ return [
     WalletRepositoryContract::class => WalletRepository::class,
 
     //HttpClient
-//    HttpClientContract::class => HttpClientLaravel::class,
+    HttpClientContract::class => HttpClientHyperf::class,
 
     //Jobs
-    //SendEmailJobService::class => SendEmailJobAdapter::class,
-    //SendSmsJobService::class => SendSmsJobAdapter::class,
+    SendEmailJobService::class => SendEmailJobAdapter::class,
+    SendSmsJobService::class => SendSmsJobAdapter::class,
 ];

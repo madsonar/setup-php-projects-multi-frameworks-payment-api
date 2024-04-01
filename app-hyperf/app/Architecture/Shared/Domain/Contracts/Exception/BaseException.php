@@ -1,7 +1,5 @@
 <?php
 
-// phpcs:ignoreFile
-
 declare(strict_types=1);
 
 namespace App\Architecture\Shared\Domain\Contracts\Exception;
@@ -11,24 +9,28 @@ use Exception;
 abstract class BaseException extends Exception implements ExceptionContract
 {
     protected int $statusCode = 400;
-    protected string $msg     = 'An error occurred';
 
-    public function __construct(string|null $message = null, int|null $statusCode = null, protected array $data = [])
+    public function __construct(string $message = '', int|null $statusCode = null, protected array $data = [])
     {
-        parent::__construct($message ?: $this->msg);
+        parent::__construct($message);
 
-        if (! $statusCode) {
-            return;
+        if ($statusCode !== null) {
+            $this->statusCode = $statusCode;
         }
 
-        $this->statusCode = $statusCode;
+        $this->data = $data;
     }
 
-    public function response(): mixed
+    public function getStatusCode(): int
     {
-        return response()->json([
-            'data' => $this->data,
+        return $this->statusCode;
+    }
+
+    public function getResponseData(): array
+    {
+        return [
             'message' => $this->getMessage(),
-        ], $this->statusCode);
+            'data' => $this->data,
+        ];
     }
 }

@@ -7,6 +7,8 @@ namespace App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Pay
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Entities\Transaction as DomainTransaction;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Enums\TransactionStatus;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\InsufficientFunds;
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\TransactionAlreadyReverted;
+use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Exceptions\TransactionNotFound;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Domain\Repositories\TransactionRepositoryContract;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models\Transaction as EloquentTransaction;
 use App\Architecture\CoreDomain\BoundedContexts\Payment\Infrastructure\Payment\Models\Wallet;
@@ -14,11 +16,15 @@ use Hyperf\DbConnection\Db;
 
 class TransactionRepository implements TransactionRepositoryContract
 {
-    public function findById(int $id): ?DomainTransaction
+    public function findById(int $id): DomainTransaction
     {
         $transaction = EloquentTransaction::find($id);
 
-        return $transaction ? $this->toDomainEntity($transaction) : null;
+        if (! $transaction) {
+            throw new TransactionNotFound();
+        }
+
+        return $this->toDomainEntity($transaction);
     }
 
     public function executeTransaction(DomainTransaction $domainTransaction): DomainTransaction
@@ -27,7 +33,7 @@ class TransactionRepository implements TransactionRepositoryContract
             $payerWallet = Wallet::where('customer_id', $domainTransaction->payerId)->lockForUpdate()->first();
             $payeeWallet = Wallet::where('customer_id', $domainTransaction->payeeId)->lockForUpdate()->first();
 
-            if (!$payerWallet || $payerWallet->current_balance < $domainTransaction->value) {
+            if (! $payerWallet || $payerWallet->current_balance < $domainTransaction->value) {
                 throw new InsufficientFunds();
             }
 
@@ -49,10 +55,14 @@ class TransactionRepository implements TransactionRepositoryContract
     public function revertTransaction(int $originalTransactionId, string $transactionKey): DomainTransaction
     {
         return Db::transaction(function () use ($originalTransactionId, $transactionKey) {
-            $originalTransaction = EloquentTransaction::findOrFail($originalTransactionId);
+            $originalTransaction = EloquentTransaction::find($originalTransactionId);
 
-            if ($originalTransaction->status === TransactionStatus::REVERTED->value) {
-                throw new Exception('This transaction has already been reverted.');
+            if (! $originalTransaction) {
+                throw new TransactionNotFound();
+            }
+
+            if ($originalTransaction->status->value === TransactionStatus::REVERTED->value) {
+                throw new TransactionAlreadyReverted();
             }
 
             $revertedTransaction = EloquentTransaction::create([
@@ -83,8 +93,8 @@ class TransactionRepository implements TransactionRepositoryContract
             id: $eloquentTransaction->id,
             payerId: $eloquentTransaction->payer_id,
             payeeId: $eloquentTransaction->payee_id,
-            value: $eloquentTransaction->value,
-            status: TransactionStatus::from($eloquentTransaction->status),
+            value: (float) $eloquentTransaction->value,
+            status: $eloquentTransaction->status,
             transactionKey: $eloquentTransaction->transaction_key,
             revertedTransactionId: $eloquentTransaction->reverted_transaction_id,
         );
