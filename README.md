@@ -268,6 +268,137 @@ A tabela transactions tem relações muitos-para-um com a tabela customers, indi
 └── SupportDomain
 ```
 
+## HYPERF | Arquitetura do Sistema de Pagamento - PaymentPAY
+
+![Hyperf](/_docs/Images/hyperf-logo.png)
+![Arquitetura do Sistema de Pagamento](/_docs/Images/arch-infra-hyperf.png)
+
+## HYPERF | Tree project PaymentPAY
+```make
+├── CoreDomain
+│   └── BoundedContexts
+│       ├── Ai
+│       └── Payment
+│           ├── Application
+│           │   ├── DTOs
+│           │   └── Services
+│           │       ├── Customer
+│           │       │   └── CreateCustomerService.php
+│           │       ├── Transaction
+│           │       │   ├── ExecuteTransactionService.php
+│           │       │   └── RevertTransactionService.php
+│           │       └── Wallet
+│           │           └── CheckBalanceWalletService.php
+│           ├── Domain
+│           │   ├── Entities
+│           │   │   ├── Customer.php
+│           │   │   ├── Transaction.php
+│           │   │   └── Wallet.php
+│           │   ├── Enums
+│           │   │   ├── CustomerType.php
+│           │   │   └── TransactionStatus.php
+│           │   ├── Exceptions
+│           │   │   ├── InsufficientFunds.php
+│           │   │   ├── ShopkeeperCannotSend.php
+│           │   │   ├── TransactionAlreadyReverted.php
+│           │   │   ├── TransactionNotAuthorized.php
+│           │   │   └── TransactionNotFound.php
+│           │   ├── Repositories
+│           │   │   ├── CustomerRepositoryContract.php
+│           │   │   ├── TransactionRepositoryContract.php
+│           │   │   └── WalletRepositoryContract.php
+│           │   ├── Services
+│           │   │   ├── ExternalPaymentAuthorizerService.php
+│           │   │   ├── ExternalSendEmailService.php
+│           │   │   ├── ExternalSendSmsService.php
+│           │   │   └── Jobs
+│           │   │       ├── SendEmailJobService.php
+│           │   │       └── SendSmsJobService.php
+│           │   ├── UseCases
+│           │   │   ├── Customer
+│           │   │   │   └── CreateCustomerUseCase.php
+│           │   │   ├── Transaction
+│           │   │   │   ├── ExecuteTransactionUseCase.php
+│           │   │   │   └── RevertTransactionUseCase.php
+│           │   │   └── Wallet
+│           │   │       └── CheckBalanceWalletUseCase.php
+│           │   └── ValueObjects
+│           ├── Infrastructure
+│           │   ├── Customer
+│           │   │   ├── Http
+│           │   │   │   └── Controllers
+│           │   │   │       └── CustomerController.php
+│           │   │   ├── Models
+│           │   │   │   └── Customer.php
+│           │   │   ├── Repositories
+│           │   │   │   └── CustomerRepository.php
+│           │   │   ├── Requests
+│           │   │   │   └── Customer
+│           │   │   │       └── CreateCustomerRequest.php
+│           │   │   └── Response
+│           │   │       └── Customer
+│           │   │           └── CreateCustomerResponse.php
+│           │   └── Payment
+│           │       ├── Http
+│           │       │   └── Controllers
+│           │       │       ├── TransactionController.php
+│           │       │       └── WalletController.php
+│           │       ├── Job
+│           │       │   ├── SendEmailJobAdapter.php
+│           │       │   └── SendSmsJobAdapter.php
+│           │       ├── Models
+│           │       │   ├── Transaction.php
+│           │       │   └── Wallet.php
+│           │       ├── Repositories
+│           │       │   ├── TransactionRepository.php
+│           │       │   └── WalletRepository.php
+│           │       ├── Requests
+│           │       │   ├── Transaction
+│           │       │   │   ├── ExecuteTransactionRequest.php
+│           │       │   │   └── RevertTransactionRequest.php
+│           │       │   └── Wallet
+│           │       │       └── CheckBalanceWalletRequest.php
+│           │       └── Response
+│           │           ├── Transaction
+│           │           │   ├── ExecuteTransactionResponse.php
+│           │           │   └── RevertTransactionResponse.php
+│           │           └── Wallet
+│           │               └── CheckBalanceWalletResponse.php
+│           └── Tests
+├── GenericDomain
+├── Shared
+│   ├── Application
+│   │   └── Contracts
+│   │       ├── Request
+│   │       │   └── RequestContract.php
+│   │       └── Response
+│   │           └── ResponseContract.php
+│   ├── Domain
+│   │   ├── Contracts
+│   │   │   ├── Exception
+│   │   │   │   ├── BaseException.php
+│   │   │   │   └── ExceptionContract.php
+│   │   │   ├── HttpClient
+│   │   │   │   └── HttpClientContract.php
+│   │   │   └── Job
+│   │   │       └── JobContract.php
+│   │   └── Helpers
+│   │       └── UuidHelper.php
+│   └── Infrastructure
+│       ├── Adapters
+│       │   ├── Exception
+│       │   │   ├── ErrorResponse.php
+│       │   │   └── HyperfExceptionHandler.php
+│       │   └── Http
+│       │       └── Client
+│       │           └── Hyperf
+│       │               └── HttpClientHyperf.php
+│       └── Contracts
+│           └── Response
+│               └── BaseResponse.php
+└── SupportDomain
+```
+
 #### Conclusão
 O PaymentPAY representa a sinergia entre práticas modernas de desenvolvimento e operações, resultando em uma plataforma de pagamentos que não apenas atende aos requisitos técnicos e de negócios de hoje, mas também está preparada para as demandas do futuro.
 
