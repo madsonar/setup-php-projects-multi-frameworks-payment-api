@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Client</title>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var ws = new WebSocket("ws://localhost:9977");
+            ws.onopen = function() {
+                console.log("Connected");
+                ws.send(JSON.stringify({ action: 'fetchRepos', username: '', token: '' }));
+            };
+            ws.onmessage = function(event) {
+                var data = JSON.parse(event.data);
+                console.log(data.message);
+                document.getElementById("output").innerHTML += data.message + "<br>";
+            };
+            ws.onclose = function() {
+                console.log("Disconnected");
+            };
+        });
+    </script>
+</head>
+<body>
+    AQUI:
+    <div id="output"></div>
+</body>
+</html>

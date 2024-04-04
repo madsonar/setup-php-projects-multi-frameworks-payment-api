@@ -116,6 +116,23 @@ services:
     #  - APP_ENV=${APP_ENV}
     #  - APP_SECRET=${APP_SECRET}
 
+  app-swoole:
+    image: app-swoole
+    hostname: app-swoole
+    container_name: app-swoole
+    build:
+      context: ./
+      dockerfile: ./.docker/php/swoole/Dockerfile
+    ports:
+      - "9977:9977"
+    volumes:
+      - ./app-swoole:/var/www/
+      #- ./docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - network-digital-codigos
+
   php-apache:
     image: php-apache
     hostname: php-apache
