@@ -58,7 +58,6 @@ RUN apt-get install -y libssh-dev
 RUN pecl install openswoole \
     && docker-php-ext-enable openswoole
 
-
 # Copiar php.ini-development ou php.ini-production para php.ini
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 

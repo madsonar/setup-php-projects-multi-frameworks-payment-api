@@ -11,7 +11,7 @@ use Swoole\Http\Server;
 $server = new Server('0.0.0.0', 9977);
 
 $server->on('start', static function (Server $server) {
-    echo "Swoole HTTP server http://localhost:9977\n";
+    echo "Swoole HTTP server http://localhost:9977";
 });
 
 $server->on('request', static function (Request $request, Response $response) {
