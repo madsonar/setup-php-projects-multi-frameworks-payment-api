@@ -43,6 +43,7 @@ $server->on('request', static function (Request $request, Response $response) {
             $clientRepo->get("/repos/$username/$repoName");
             $repoDetails = json_decode($clientRepo->body, true);
             echo 'Repo full_name: ' . $repoDetails['full_name'] . "\n";
+            
             $clientRepo->close();
             $channel->push(true);
         });

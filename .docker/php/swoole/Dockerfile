@@ -15,6 +15,7 @@ RUN mkdir -p /home/${USER} && \
     chown -R ${USER}:${USER} /home/${USER}
 
 ENTRYPOINT [ "php", "/var/www/index.php", "start" ]
+
 USER ${USER}
 EXPOSE 9977
 
